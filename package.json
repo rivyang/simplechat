@@ -1,0 +1,24 @@
+{
+  "name": "simplechat",
+  "version": "1.0.0",
+  "description": "A simple real-time chat application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rivyang/simplechat.git"
+  },
+  "author": "rivyang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rivyang/simplechat/issues"
+  },
+  "homepage": "https://github.com/rivyang/simplechat#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
+}
