@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>SimpleChat</h1>
+    </header>
+    <main>
+        <section aria-label="Chat History" id="chat-history">
+        </section>
+        <section aria-label="Send a message">
+            <form id="message-form">
+                <input type="text" id="message-input" placeholder="Enter your message here..." required>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 SimpleChat</p>
+    </footer>
+    <script>
+        document.getElementById('message-form').onsubmit = function(event) {
+            event.preventDefault();
+            const message = document.getElementById('message-input').value;
+            const chatHistory = document.getElementById('chat-history');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatHistory.appendChild(messageElement);
+            document.getElementById('message-input').value = '';
+        };
+    </script>
+</body>
+</html>
