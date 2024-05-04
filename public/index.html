@@ -5,12 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimpleChat</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic dark mode styling */
+        body.dark-mode {
+            background-color: #333;
+            color: #f1f1f1;
+        }
+        header.dark-mode, footer.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+        section.dark-mode, input[type="text"], button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+        }
+        /* Style for the dark mode toggle */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .theme-switch-wrapper em {
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        .theme-switch input {
+            display:none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+        }
+        input:checked + .slider {
+            background-color: #66bb6a;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>SimpleChat</h1>
     </header>
     <main>
+        <div class="theme-switch-wrapper">
+            <em>Enable Dark Mode!</em>
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox"/>
+                <div class="slider round"></div>
+            </label>
+        </div>
         <section aria-label="Chat History" id="chat-history">
         </section>
         <section aria-label="Send a message">
@@ -33,6 +108,17 @@
             chatHistory.appendChild(messageElement);
             document.getElementById('message-input').value = '';
         };
+
+        // Dark mode toggle script
+        document.getElementById('checkbox').addEventListener('change', function(event) {
+            document.body.classList.toggle('dark-mode', event.target.checked);
+            document.querySelector('header').classList.toggle('dark-mode', event.target.checked);
+            document.querySelector('footer').classList.toggle('dark-mode', event.target.checked);
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.toggle('dark-mode', event.target.checked);
+            });
+        });
     </script>
 </body>
 </html>
