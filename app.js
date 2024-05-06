@@ -3,39 +3,59 @@ import { config } from 'dotenv';
 
 config();
 
-const chatSocket = new WebSocket(process.env.WEBSOCKET_SERVER_URL);
+const chatSocket = initializeWebSocket(process.env.WEBSOCKET_SERVER_URL);
 
-const initializeChatSocketListeners = () => {
-  chatSocket.on('open', () => {
-    console.log('Connected to the chat server');
-  });
-  chatSocket.on('message', (message) => {
-    displayChatMessage(message);
-  });
-  chatSocket.on('error', (error) => {
-    console.error('WebSocket error: ', error);
-  });
-  chatSocket.on('close', () => {
-    console.log('Disconnected from the chat server');
-  });
-};
+function initializeWebSocket(serverUrl) {
+  const socket = new WebSocket(serverUrl);
+  socket.on('open', handleOpenConnection);
+  socket.on('message', handleMessageReceived);
+  socket.on('error', handleErrorEvent);
+  socket.on('close', handleCloseConnection);
+  return socket;
+}
 
-const sendChatMessage = (message) => {
+function handleOpenConnection() {
+  console.log('Connected to the chat server');
+}
+
+function handleMessageReceived(message) {
+  displayChatMessage(message);
+}
+
+function handleErrorEvent(error) {
+  console.error('WebSocket error: ', error);
+}
+
+function handleCloseConnection() {
+  console.log('Disconnected from the chat server');
+}
+
+function sendChatMessage(message) {
   chatSocket.send(message);
-};
+}
 
-const displayChatMessage = (message) => {
+function displayChatMessage(message) {
   const chatMessagesContainer = document.getElementById('messages');
   const chatMessageElement = document.createElement('p');
   chatMessageElement.textContent = message;
   chatMessagesContainer.appendChild(chatMessageElement);
-};
+}
 
-document.getElementById('send-message-form').addEventListener('submit', (event) => {
+function setupMessageSending() {
+  const sendMessageForm = document.getElementById('send-message-form');
+  sendMessageForm.addEventListener('submit', handleSendMessage);
+}
+
+function handleSendMessage(event) {
   event.preventDefault();
   const messageInputField = document.getElementById('message-input');
-  sendChatMessage(messageInputField.value);
+  const message = messageInputField.value;
+  sendChatMessage(message);
   messageInputField.value = '';
-});
+}
 
-initializeChatSocketListeners();
+function initializeApplication() {
+  setupMessageSending();
+}
+
+initializeApplication();
