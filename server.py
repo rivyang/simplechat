@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key!')
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-active_rooms = {}  # Key: room_name, Value: list of participants
+active_rooms = {}  # Key: room_name, Value: dict with a list of participants
 
 @app.route('/create_room', methods=['POST'])
 def create_chat_room():
@@ -33,16 +33,18 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    if room in active_rooms:  # This check ensures room exists
-        active_rooms[room]['participants'].append(username)
-        emit('room_status', {'msg': f'{username} has joined the room.'}, room=room)
+    if room not in active_rooms:
+        active_rooms[room] = {'participants': []}  # Auto-create room if doesn't exist upon join
+    active_rooms[room]['participants'].append(username)
+    emit('room_status', {'msg': f'{username} has joined the room.'}, room=room)
 
 @socketio.on('leave_room')
 def on_leave(data):
     username = data['username']
     room = data['room']
     leave_room(room)
-    if room in active_rooms:  # This check ensures room exists
+    # Safety check to avoid crashing if room somehow doesn't exist
+    if room in active_rooms and username in active_rooms[room]['participants']:
         active_rooms[room]['participants'].remove(username)
         emit('room_status', {'msg': f'{username} has left the room.'}, room=room)
 
