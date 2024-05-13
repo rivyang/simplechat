@@ -51,6 +51,9 @@ class ChatRoom:
     def display_chat_history(self):
         return self.chat_history
 
+    def search_chat_history(self, keyword):
+        return [message for message in self.chat_history if keyword in message]
+
 class ChatService:
     def __init__(self):
         self.chat_rooms = {}  # Renamed from rooms for explicit naming
@@ -116,4 +119,19 @@ class ChatService:
             return []
         except Exception as error:
             print(f"Unexpected error retrieving chat history: {error}")
+            return []
+
+    def list_chat_rooms(self):
+        return list(self.chat_rooms.keys())
+
+    def search_chat_history(self, room_name, keyword):
+        if not isinstance(room_name, str) or not isinstance(keyword, str):
+            print("Room name and keyword must be strings")
+            return []
+        try:
+            if room_name in self.chat_rooms:
+                return self.chat_rooms[room_name].search_chat_history(keyword)
+            return []
+        except Exception as error:
+            print(f"Unexpected error searching chat history: {error}")
             return []
